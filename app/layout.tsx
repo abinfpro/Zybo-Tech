@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ZYBO | Premium Footwear",
-  description: "Experience the next generation of comfort.",
+  description: "Experiences the next generation of comfort.",
 };
 
 export default function RootLayout({
