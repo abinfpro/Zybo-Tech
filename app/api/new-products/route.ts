@@ -3,7 +3,7 @@ import axios from '@/lib/axios';
 
 export async function GET(request: NextRequest) {
     try {
-        const response = await axios.get("new-products");
+        const response = await axios.get("new-products/");
 
         return NextResponse.json(response.data, { status: response.status });
     } catch (error) {
