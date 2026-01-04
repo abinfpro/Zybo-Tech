@@ -8,31 +8,24 @@ const axiosInstance = axios.create({
   },
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    let token =
-      Cookies.get("auth_token") ??
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzY4NTY5MTMzLCJpYXQiOjE3NjcyNzMxMzMsImp0aSI6IjY3YjkyY2RmNjFjYzQyZTk4MWI1NzE0YmUzODhhYWFjIiwidXNlcl9pZCI6IkFSTTAwMDMifQ.NNeKq-1yqIx1e4iVawXYdiAnqej9p6BXwu4tLt9FH68";
-    if (typeof window !== "undefined") {
-      const storedToken = localStorage.getItem("auth_token");
-      if (storedToken) {
-        try {
-          token = JSON.parse(storedToken);
-        } catch (e) {
-          token = storedToken;
-        }
-      }
-    }
+axiosInstance.interceptors.request.use((config) => {
+  let token;
 
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+  if (typeof window !== "undefined") {
+    token =
+      Cookies.get("auth_token") ||
+      localStorage.getItem("auth_token");
   }
-);
+
+  if (token && typeof token === "string") {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    delete config.headers.Authorization;
+  }
+
+  return config;
+});
+
 
 axiosInstance.interceptors.response.use(
   (response) => response,
